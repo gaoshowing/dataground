@@ -1,4 +1,4 @@
-# db-tool
+# dataground
 
 db-tool is an open source database client built with Tauri, Rust, Vue 3, and TypeScript.
 
