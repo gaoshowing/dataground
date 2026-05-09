@@ -1,16 +1,128 @@
-# Tauri + Vue + TypeScript
+# db-tool
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+db-tool is an open source database client built with Tauri, Rust, Vue 3, and TypeScript.
 
-## Recommended IDE Setup
+The project is in early development. The current codebase focuses on the desktop shell, multi-window frontend structure, and the foundation for keeping shared application state in Rust.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Features
 
-## Type Support For `.vue` Imports in TS
+- Tauri 2 desktop application
+- Vue 3 + TypeScript frontend
+- Vite multi-page entry setup for independent windows
+- Rust command layer for opening application windows
+- Separate main, query, and settings window entries
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+## Tech Stack
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+- Tauri 2
+- Rust
+- Vue 3
+- TypeScript
+- Vite
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+## Project Structure
+
+```txt
+.
+├── index.html              # Main window HTML entry
+├── query.html              # Query window HTML entry
+├── settings.html           # Settings window HTML entry
+├── src/
+│   ├── entries/            # Vue entry files for each window
+│   ├── windows/            # Window-level Vue components
+│   └── styles.css          # Shared frontend styles
+└── src-tauri/              # Tauri and Rust application code
+```
+
+## Getting Started
+
+### Requirements
+
+- Node.js
+- Yarn
+- Rust
+- Tauri system dependencies for your platform
+
+See the Tauri prerequisites guide for platform-specific setup:
+https://tauri.app/start/prerequisites/
+
+### Install Dependencies
+
+```bash
+yarn install
+```
+
+### Start the Desktop App
+
+```bash
+yarn tauri dev
+```
+
+Tauri starts the Vite dev server automatically through `beforeDevCommand`, so you usually should not run `yarn dev` separately while using `yarn tauri dev`.
+
+### Frontend-Only Development
+
+```bash
+yarn dev
+```
+
+Then open:
+
+- http://localhost:1420/
+- http://localhost:1420/query.html
+- http://localhost:1420/settings.html
+
+### Build
+
+```bash
+yarn build
+```
+
+### Rust Check
+
+```bash
+cd src-tauri
+cargo check
+```
+
+## Multi-Window Model
+
+The frontend uses Vite multi-page entries:
+
+- `src/entries/main.ts`
+- `src/entries/query.ts`
+- `src/entries/settings.ts`
+
+Each entry mounts a dedicated window component from `src/windows`.
+
+Tauri opens secondary windows through Rust commands:
+
+- `open_query_window`
+- `open_settings_window`
+
+This keeps the desktop window lifecycle in Rust while allowing each Vue entry to stay focused on a single window UI.
+
+## Roadmap
+
+- Database connection management
+- SQL editor integration
+- Query execution and result grid
+- Connection profiles and local settings
+- Cross-window state managed from Rust
+- Import/export workflows
+
+## Contributing
+
+Contributions are welcome once the project direction stabilizes. For now, please keep changes small and focused.
+
+Before opening a pull request, make sure these checks pass:
+
+```bash
+yarn build
+cd src-tauri
+cargo check
+```
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
